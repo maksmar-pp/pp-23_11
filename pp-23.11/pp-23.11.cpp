@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-
+#include <vector>
 void clear() {
 	std::cout << "\x1b[2J\x1b[H";
 }
@@ -73,9 +73,177 @@ void zad7() {
 	std::cin >> length;
 
 	std::cout << "Sub: " << text.substr(start, length) << "\n";
-}
-void zad8() {
+}	
 
+void zad8() {
+	std::string text = "2026-11-10";
+
+	std::size_t first = text.find('-');
+	std::size_t second = text.find('-', first+1);
+
+	std::string year = text.substr(0, first);
+	std::string month = text.substr(first+1, second - first - 1);
+	std::string day = text.substr(second + 1);
+	std::cout 
+			<< "Rok:     " << year << '\n'
+			<< "Miesiac: " << month << '\n'
+			<< "Dzien:   " << day << '\n';
+}
+void zad9() {
+	std::string text, searched;
+	std::cout << "Tekst: ";
+	std::getline(std::cin, text);
+	std::cout << "Szukane: ";
+	std::getline(std::cin, searched);
+
+	std::size_t found = text.find(searched);
+	if (found == std::string::npos) {
+		std::cout << "Nie znaleziono";
+		return;
+	}
+
+	std::cout << found << "\n";
+}
+void zad10() {
+	std::string email;
+	std::cout << "Adres: ";
+	std::cin >> email;
+	std::size_t at = email.find("@");
+	if (at == std::string::npos) {
+		std::cout << "Zly adres\n";
+		return;
+	}
+	std::string username = email.substr(0, at);
+	std::string domain = email.substr(at + 1);
+	std::cout
+		<< "user: " << username
+		<< "\ndomain: " << domain;
+}
+void zad11() {
+	std::string name, lastName;
+	std::cout << "name: ";
+	std::cin >> name;
+	std::cout << "lastname: ";
+	std::cin >> lastName;
+	std::string fullName = name + " " + lastName;
+	std::cout << fullName << " length: " << fullName.length() << '\n';
+}
+void zad12() {
+	std::string number;
+	std::cout << "numer: ";
+	std::cin >> number;
+	int n;
+	try {
+		n = std::stoi(number);
+		int dn = n * 2;
+		int tn = n + 10;
+		std::cout << "n: " << n
+			<< "\n podwojona: " << dn
+			<< "\nplus 10: " << tn << '\n';
+	}
+	catch (std::invalid_argument error) {
+		std::cout << "error: " << error.what();
+	}
+}
+void zad13() {
+	std::string number;
+	std::cout << "numer: ";
+	std::cin >> number;
+	try {
+	double 	price  = std::stod(number);
+	double whole = price * 5;
+	int iprice = (int)price;
+	std::cout << "price: " << price
+		<< "\n5 sztuk: " << whole
+		<< "iprice: " << iprice << "\n";
+	}
+	catch (std::invalid_argument error) {
+		std::cout << "error: " << error.what();
+	}
+}
+void zad14() {
+	std::vector<std::string> tests = { "123", "123abc", "abc123", "12.5" };
+
+	for (const auto& s : tests) {
+		try {
+			std::size_t pos = 0;
+			int val = std::stoi(s, &pos);
+			std::cout << "\"" << s << "\" wynik: " << val
+				<< " znaki: " << pos << "/" << s.size() << ")\n";
+		}
+		catch (const std::exception& e) {
+			std::cout << "\"" << s << "\"error: " << e.what() << "\n";
+		}
+	}
+}
+void zad15() {
+	std::string input;
+	std::cout << "Podaj tekst: ";
+	std::getline(std::cin, input);
+
+	try {
+		int number = std::stoi(input);
+		std::cout << "liczba: " << number << '\n';
+	}
+	catch (const std::invalid_argument&) {
+		std::cout << "tekst nie reprezentuje liczby.\n";
+	}
+	catch (const std::out_of_range&) {
+		std::cout << "liczba poza zakresem typu int.\n";
+	}
+}
+void zad16() {
+	std::string input;
+	std::cout << "Podaj wiek: ";
+	std::getline(std::cin, input);
+
+	try {
+		std::size_t pos = 0;
+		int age = std::stoi(input, &pos);
+
+		if (pos != input.size()) {
+			std::cout << "tekst zawiera niedozwolone znaki po liczbie\n";
+		}
+		else if (age >= 0 && age <= 150) {
+			std::cout << "Poprawny wiek: " << age << '\n';
+		}
+		else {
+			std::cout << "Wiek spoza dopuszczalnego zakresu (0-150)\n";
+		}
+	}
+	catch (const std::exception&) {
+		std::cout << "nie mozna przekonwertowac tekstu na liczbe\n";
+	}
+}
+void zad17() {
+	std::string line;
+	std::cout << "Imie Nazwisko;Wiek: ";
+	std::getline(std::cin, line);
+
+	std::size_t sep = line.find(';');
+	if (sep == std::string::npos) {
+		std::cout << "brak srednika\n";
+		return;
+	}
+
+	std::string full_name = line.substr(0, sep);
+	std::string age_str = line.substr(sep + 1);
+
+	try {
+		int age = std::stoi(age_str);
+		std::cout << "Imię i nazwisko: " << full_name << '\n'
+			<< "Wiek: " << age << '\n';
+
+		if (age >= 0 && age <= 150) {
+			std::cout << "wiek w dopuszczalnym przedziale\n";
+		}
+		else {
+			std::cout << "wiek spoza przedziału 0-150\n";
+		}
+	}
+	catch (const std::exception&) {
+		std::cout << "nieprawidłowy zapis wieku.\n";
+	}
 }
 int main()
 {
@@ -85,7 +253,16 @@ int main()
 	//zad4();
 	//zad5();
 	//zad6();
-	zad7();
-
+	//zad7();
+	//zad8();
+	//zad9();
+	//zad10();
+	//zad11();
+	//zad12();
+	//zad13();
+	//zad14();
+	//zad15();
+	//zad16();
+		zad17();
 	return 0;
 }
